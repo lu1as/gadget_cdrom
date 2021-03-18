@@ -6,6 +6,7 @@ import logging
 import time
 import subprocess
 import spidev
+import socket
 import RPi.GPIO as GPIO
 from PIL import Image, ImageDraw, ImageFont
 
@@ -249,6 +250,8 @@ class Display:
             return
         elif state.get_mode() in (MODE_ETHERNET, MODE_SHUTDOWN):
             draw.text((0,0), mode_text, font=self._font_large)
+            if state.get_mode() == MODE_ETHERNET:
+                draw.text((0,22), f"{socket.gethostname()}.local", font=self._font)
             self._disp.display_image(image)
             return
 
