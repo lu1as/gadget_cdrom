@@ -232,6 +232,7 @@ class Display:
         self._disp = disp
         self._font = ImageFont.truetype(FONT, 13)
         self._font_hdd = ImageFont.truetype(FONT, 52)
+        self._font_large = ImageFont.truetype(FONT, 20)
 
 
     def refresh(self, state):
@@ -242,8 +243,12 @@ class Display:
         image = Image.new('1', (self._disp.WIDTH_RES, self._disp.HEIGHT_RES), "WHITE")
         draw = ImageDraw.Draw(image)
 
-        if state.get_mode() in (MODE_HDD, MODE_ETHERNET, MODE_SHUTDOWN):
+        if state.get_mode() in (MODE_HDD):
             draw.text((0,0), mode_text, font=self._font_hdd)
+            self._disp.display_image(image)
+            return
+        elif state.get_mode() in (MODE_ETHERNET, MODE_SHUTDOWN):
+            draw.text((0,0), mode_text, font=self._font_large)
             self._disp.display_image(image)
             return
 
