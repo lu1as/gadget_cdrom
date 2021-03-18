@@ -15,9 +15,10 @@ APP_DIR = os.path.dirname(os.path.realpath(__file__))
 MODE_CD = "cd"
 MODE_HDD = "hdd"
 MODE_USB = "usb"
+MODE_ETHERNET = "ethernet"
 MODE_SHUTDOWN = "shutdown"
 
-ALL_MODES = [MODE_CD, MODE_HDD, MODE_USB, MODE_SHUTDOWN]
+ALL_MODES = [MODE_CD, MODE_HDD, MODE_USB, MODE_ETHERNET, MODE_SHUTDOWN]
 BROWSE_MODES = [MODE_CD, MODE_USB]
 
 FILE_EXTS = {
@@ -201,6 +202,8 @@ class State:
             self.set_mode(MODE_USB)
         elif mode == MODE_USB:
             self.set_mode(MODE_HDD)
+        elif mode == MODE_HDD:
+            self.set_mode(MODE_ETHERNET)
         else:
             self.set_mode(MODE_CD)
         return self.get_mode()
@@ -239,7 +242,7 @@ class Display:
         image = Image.new('1', (self._disp.WIDTH_RES, self._disp.HEIGHT_RES), "WHITE")
         draw = ImageDraw.Draw(image)
 
-        if state.get_mode() in (MODE_HDD, MODE_SHUTDOWN):
+        if state.get_mode() in (MODE_HDD, MODE_ETHERNET, MODE_SHUTDOWN):
             draw.text((0,0), mode_text, font=self._font_hdd)
             self._disp.display_image(image)
             return
